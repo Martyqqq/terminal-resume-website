@@ -1,0 +1,178 @@
+/* Palette sampled from direction.mov: macOS Terminal, green on near-black */
+:root {
+  --bg: #050505;
+  --panel: #0a0d0a;
+  --green: #30fd21;
+  --green-dim: #1fa915;
+  --green-faint: rgba(48, 253, 33, 0.12);
+  --chrome: #2a2a2a;
+  --font: Menlo, Monaco, "SF Mono", Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--green);
+  font: 15px/1.6 var(--font);
+  padding: 24px 16px;
+  text-shadow: 0 0 6px rgba(48, 253, 33, 0.35);
+}
+
+/* faint CRT scanlines */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0 2px, rgba(0, 0, 0, 0.18) 2px 3px);
+  z-index: 10;
+}
+
+::selection { background: var(--green); color: var(--bg); text-shadow: none; }
+
+a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+a:hover, a:focus-visible { background: var(--green); color: var(--bg); text-shadow: none; text-decoration: none; }
+:focus-visible { outline: 1px dashed var(--green); outline-offset: 2px; }
+
+h1, h2, h3 { font-size: inherit; margin: 0; font-weight: bold; }
+h1 { font-size: 1.15rem; margin: 0.5rem 0; }
+h2 { margin-bottom: 0.75rem; }
+p { margin: 0.4rem 0; }
+ul { margin: 0.4rem 0; padding-left: 0; list-style: none; }
+ul:not(.contact) li { padding-left: 1.5em; text-indent: -1.5em; }
+ul:not(.awards):not(.contact) li::before { content: "- "; color: var(--green-dim); }
+
+.dim, .meta, .at, .tags, .perm { color: var(--green-dim); }
+.hi { font-weight: bold; }
+kbd { font: inherit; border: 1px solid var(--green-dim); padding: 0 0.3em; }
+
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 16px; top: 8px; z-index: 20; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Terminal window */
+.window {
+  max-width: 980px;
+  margin: 0 auto;
+  border: 1px solid var(--chrome);
+  border-radius: 10px;
+  background: var(--panel);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px var(--green-faint);
+  overflow: clip; /* not hidden, so the sticky command bar still sticks */
+}
+
+.titlebar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  background: linear-gradient(#2e2e2e, #232323);
+  border-bottom: 1px solid #111;
+  color: #9a9a9a;
+  font-size: 12px;
+  text-shadow: none;
+}
+.lights { position: absolute; left: 12px; display: flex; gap: 8px; }
+.lights i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; }
+.lights i:nth-child(3) { background: #28c840; }
+.title { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 0 70px; }
+
+.cmdbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  padding: 8px 16px;
+  background: rgba(10, 13, 10, 0.95);
+  border-bottom: 1px dashed var(--green-dim);
+}
+.cmdbar a { text-decoration: none; padding: 0 6px; }
+.cmdbar a::before { content: "./"; color: var(--green-dim); }
+.cmdbar a:hover::before, .cmdbar a:focus-visible::before { color: var(--bg); }
+
+.screen { padding: 16px 20px 28px; }
+
+.block { margin: 0 0 2rem; }
+.prompt { margin: 0 0 0.4rem; white-space: pre-wrap; word-break: break-word; }
+.ps1 { color: var(--green); }
+.out { padding-left: 0; }
+
+/* Block cursor like the reference */
+.cursor {
+  display: inline-block;
+  width: 0.62em;
+  height: 1.15em;
+  vertical-align: text-bottom;
+  background: var(--green);
+  box-shadow: 0 0 6px rgba(48, 253, 33, 0.6);
+  animation: blink 1.05s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.banner {
+  margin: 0.5rem 0;
+  font-size: clamp(5px, 1.45vw, 13px);
+  line-height: 1.2;
+  overflow-x: auto;
+  font-weight: bold;
+}
+
+.entry { margin: 0 0 1.25rem; padding-left: 12px; border-left: 2px solid var(--green-faint); }
+.entry h3 { font-size: 1rem; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 0.75rem; }
+.card { border: 1px solid var(--green-dim); padding: 12px 14px; background: rgba(48, 253, 33, 0.03); }
+.card:hover { border-color: var(--green); box-shadow: 0 0 12px var(--green-faint); }
+.card h3 { word-break: break-word; }
+.perm { font-weight: normal; margin-right: 0.4em; }
+.tags { font-size: 0.85em; }
+
+.skills { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; }
+.skills dt { font-weight: bold; }
+.skills dt::after { content: ":"; }
+.skills dd { margin: 0; }
+
+.contact .key { display: inline-block; min-width: 6.5em; color: var(--green-dim); }
+
+/* Interactive shell */
+#cli { display: flex; align-items: center; gap: 0.6em; }
+#cmd {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: var(--green);
+  font: inherit;
+  text-shadow: inherit;
+  caret-color: var(--green);
+  outline: none;
+  padding: 0;
+}
+#history .line { white-space: pre-wrap; word-break: break-word; margin: 0 0 0.3rem; }
+
+.foot { text-align: center; font-size: 12px; margin-top: 16px; }
+
+/* Typing intro: JS adds .booting until the word is typed */
+.booting .reveal { visibility: hidden; }
+
+@media (max-width: 600px) {
+  body { padding: 12px 8px; font-size: 14px; }
+  .screen { padding: 12px 12px 20px; }
+  .skills { grid-template-columns: 1fr; }
+  .skills dd { margin-bottom: 0.5rem; }
+  .title { padding: 0 60px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cursor { animation: none; }
+}
